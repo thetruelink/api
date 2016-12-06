@@ -1,0 +1,60 @@
+data_new_contact:
+    path:     /newContact
+    defaults: { _controller: DataBundle:Contact:newContact }
+    
+data_update_contact:
+    path:     /updateContact
+    defaults: { _controller: DataBundle:Contact:updateContact }
+    
+data_add_contact:
+    path:     /addContact
+    defaults: { _controller: DataBundle:Contact:addContact }
+    
+data_remove_contact:
+    path:     /removeContact
+    defaults: { _controller: DataBundle:Contact:removeContact }
+    
+data_state_contact:
+    path:     /changeState
+    defaults: { _controller: DataBundle:Contact:changeState }
+    
+data_liste_contact:
+    path:     /listeContact
+    defaults: { _controller: DataBundle:Contact:listeContact }
+
+data_all_contact:
+    path:     /allContacts
+    defaults: { _controller: DataBundle:Contact:allContacts }
+    
+data_all_admin_contact:
+    path:     /allContactsAdmin
+    defaults: { _controller: DataBundle:Contact:allContactsAdmin }
+    
+data_send_message:
+    path:     /sendMessage
+    defaults: { _controller: DataBundle:Message:sendMessage }
+
+data_show_message:
+    path:     /getMessages
+    defaults: { _controller: DataBundle:Message:getMessages }
+    
+data_change_status:
+    path:     /changeStatus
+    defaults: { _controller: DataBundle:Contact:changeStatus }
+    
+data_all_status:
+    path:     /allStatus
+    defaults: { _controller: DataBundle:Contact:allStatus }
+
+data_credientials:
+    path:     /crediantialCheck
+    defaults: { _controller: DataBundle:Security:crediantialCheck }
+
+data_api_change:
+    path:     /changeApiId
+    defaults: { _controller: DataBundle:Contact:changeApiId }
+    
+data_api_get:
+    path:     /getApiId
+    defaults: { _controller: DataBundle:Contact:getApiId }
+    

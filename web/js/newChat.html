@@ -1,0 +1,121 @@
+<style type="text/css">
+    li {
+        list-style: none;
+    }  
+    .left {
+    
+        border-radius: 5px;
+    }
+    
+  #tableChat th, #tableChat td { 
+     border: none !important; 
+ }
+    .left, .right {
+        border-radius: 10px;
+    }
+    tr{
+        margin-bottom: 0;
+    }
+    tbody {
+        height: 100px;
+        overflow-y: auto;
+    }
+    .date {
+        text-decoration:underline;
+    }
+</style>
+
+<div class="" ng-controller="homeCtrl" style="">
+    <table class="table table-bordered" cellspacing="0" id="tableChat">
+       <thead id="thead">
+          <th class="bg-success">
+              <small class="text-primary">{{conversation.dst.prenom[0]}}.{{conversation.dst.nom}}</small>
+              <a href="#"><i class="icon-facetime-video icon-2x text-primary"></i></a>&nbsp;&nbsp;
+              <a href="#"><i class="icon-phone icon-2x text-primary"></i></a>
+              <div class="pull-right">
+                  <a href="#" id="chevron-down"><i class="icon-chevron-down text-primary"></i></a>
+                  <a href="#"><i class="icon-remove text-primary"></i></a>
+              </div>
+           </th>
+        </thead>
+        <tbody id="msgBox">
+            <tr class="">
+                <td class="text-center date">Hier</td>
+            </tr>
+            <tr>
+               <td>
+                  <div class="row" style="margin-left:10px;">
+                    <p class="col-md-10 bg-info right">On a un rendez-vous programmé pour 15H avec le DG de la BM. 
+                             <span class="pull-right small text-muted">00:27</span></p>
+                  </div>
+                  
+               </td>
+            </tr>
+            </tbody>
+        <tfoot class="bg-success" id="tfoot">
+            <tr>
+                <td><textarea class="form-control" cols="5" rows="2"></textarea></td         
+            </tr>
+            <tr>
+                <td>
+                 <label class="btn btn-file text-primary"><i class="icon-file"></i> <input type="file" style="display: none;" title="Envoyer un fichier"></label>&nbsp;
+                    <a href="#" title="Partager votre position"><i class="icon-map-marker text-primary"></i></a>
+                </td>       
+           </tr>
+            <tr>
+                <td class="bg-danger" style="display : none;" id="tfoot-chevron">
+                    <small class="text-primary">{{conversation.dst.prenom[0]}}.{{conversation.dst.nom}} </small>&nbsp;&nbsp;<i class="icon-hand-right"></i>
+                   <a href="" class="pull-right" id="chevron-up"><i class="icon-chevron-up"></i></a>
+                </td>        
+            </tr>
+        
+        </tfoot>
+    </table>
+</div>
+<style type="text/css">
+    p{
+        display: inline-block;
+        word-break:normal;
+        min-width:1px;
+        max-width:200px;
+        padding: 4px;
+    }
+    #msgBox{
+        overflow-y: auto;
+        overflow-x: hidden;
+        height: 180px;
+        display: block;
+    }
+</style>
+<script type="text/javascript">
+    
+    $(document).ready( function(){
+        $('textarea').keyup( function(e){
+            if( e.keyCode == 13){
+                var message = $('textarea').val();
+                if( message.trim() != ''){
+                    $('#msgBox').append('<tr>'+
+                        '<td>'+
+                        '<div class="" style="margin-left:0px;">'+
+                                        '<p class="bg-danger left" style="margin-bottom : 0;">'+message+ '&nbsp;'+ '<span class="pull-right small  text-muted">00:27</span>'+
+                                        '</p>'+
+                                        '</div>'+
+                                        '</td>'+
+                                        '</tr>');
+                    $('textarea').val('');
+                }
+                $('#msgBox').animate({scrollTop: $('#msgBox')[0].scrollHeight},2000);
+            }      
+        });
+        $('#chevron-down').click( function(){
+            $('#thead, #msgBox').css({'visibility' : 'hidden'});
+            $('#tfoot').children().slice(0,2).css({'visibility' : 'hidden'});
+            $('#tfoot-chevron').toggle();
+        });
+         $('#chevron-up').click( function(){
+            $('#thead, #msgBox').css({'visibility' : 'visible'});
+            $('#tfoot').children().slice(0,2).css({'visibility' : 'visible'});
+            $('#tfoot-chevron').toggle();
+        });
+ });
+</script>
