@@ -16,39 +16,40 @@ class ContactController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
-         $data = json_decode($request->getContent(), true);
-         $userId = $data['userId']; 
-         $destId = $data['destId']; 
+        $data = json_decode($request->getContent(), true);
+        $userId = $data['userId'];
+        $destId = $data['destId'];
+        $contact = $em->getRepository('DataBundle:Contact')->find($userId);
+        $user = $em->getRepository('DataBundle:User')->findOneByEmail($contact->getEmail());
+        $contact = $em->getRepository('DataBundle:Contact')->find($destId);
 
-     $user=$em->getRepository('DataBundle:User')->find(1);
-     $contact=$em->getRepository('DataBundle:Contact')->find(2);
-        
-       $user->addContact($contact);
-        
+        $user->addContact($contact);
+
         $em->persist($user);
-        
+
         $em->flush();
 
         $resp = new Response('ok');
-        $this->heders($resp);
+       // $this->heders($resp);
         return $resp;
     }
     
        public function removeContactAction(Request $request)
     {
-        
-        $em=$this->getDoctrine()->getManager();
-         $data = json_decode($request->getContent(), true);
-         $email = $data['email']; 
-        $contact=$em->getRepository('DataBundle:Contact')->findOneByEmail($email);
-        $user=$em->getRepository('DataBundle:User')->findOneByEmail($contact->getEmail());
 
-        $em->remove($user);
-        $em->remove($contact);
+        $em = $this->getDoctrine()->getManager();
+        $data = json_decode($request->getContent(), true);
+        $userId = $data['userId'];
+        $destId = $data['destId'];
+        $contact = $em->getRepository('DataBundle:Contact')->find($userId);
+        $user = $em->getRepository('DataBundle:User')->findOneByEmail($contact->getEmail());
+        $contact = $em->getRepository('DataBundle:Contact')->find($destId);
+
+        $user->removeContact($contact);
+        $em->persist($user);
         $em->flush();
 
         $resp= new Response('ok');
-        $this->heders($resp);
         return $resp;
     }
 
@@ -58,8 +59,8 @@ class ContactController extends Controller
         $em=$this->getDoctrine()->getManager();
 
          $data = json_decode($request->getContent(), true);
-         $id = $data['id']; 
-         $user=$em->getRepository('DataBundle:User')->find($id);
+         $email = $data['email'];
+         $user=$em->getRepository('DataBundle:User')->findOneByEmail($email);
 
          $contacts=$user->getContacts();
 
@@ -84,16 +85,13 @@ class ContactController extends Controller
         $json = $serializer->serialize($contacts, 'json', array());
 
         $resp= new Response($json);
-        // $this->heders($resp);
         return $resp;
     }
     
      public function allContactsAdminAction()
     {
-
         $em=$this->getDoctrine()->getManager();
         $contacts=$em->getRepository('DataBundle:Contact')->findAll();
-
         //********** serialize the contacts *******************
         $serializer = $this->get('serializer');
         $json = $serializer->serialize($contacts, 'json', array());
@@ -122,29 +120,27 @@ class ContactController extends Controller
     public function changeApiIdAction(Request $request)
     {
         
-         $apiId = $request->get('email');
-         $id =  $request->get('id');
+         $apiId = $request->get('apiId');
+         $email =  $request->get('email');
         
          $em=$this->getDoctrine()->getManager();
-         $contact=$em->getRepository('DataBundle:Contact')->find($id);
+         $contact=$em->getRepository('DataBundle:Contact')->findOneByEmail($email);
          $contact->setApiId($apiId);
          $em->flush();
         $resp= new Response('ok');
-        $this->heders($resp);
         return $resp;
     }
     
     public function getApiIdAction(Request $request)
     {
         
-         $id = $request->get('id'); 
+         $email = $request->get('email');
         
          $em=$this->getDoctrine()->getManager();
-         $contact=$em->getRepository('DataBundle:Contact')->find($id);
+         $contact=$em->getRepository('DataBundle:Contact')->findOneByEmail($email);
          $apiId=$contact->getApiId();
          $em->flush();
         $resp= new Response($apiId);
-        $this->heders($resp);
         return $resp;
     }
     

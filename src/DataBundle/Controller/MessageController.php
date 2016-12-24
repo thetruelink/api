@@ -17,12 +17,12 @@ class MessageController extends Controller
         
         $em=$this->getDoctrine()->getManager();
         $data = json_decode($request->getContent(), true);
-         $d = $data['d']; 
-         $s = $data['s']; 
-         $m = $data['m']; 
+        $s_email = $data['s_email'];
+        $d_email = $data['d_email'];
+        $m = $data['m'];
 
-        $user=$em->getRepository('DataBundle:User')->find($s);
-        $contact=$em->getRepository('DataBundle:Contact')->find($d);
+        $user=$em->getRepository('DataBundle:User')->findOneByEmail($s_email);
+        $contact=$em->getRepository('DataBundle:Contact')->findOneByEmail($d_email);
         
         $msg=new Message();
         
@@ -33,7 +33,7 @@ class MessageController extends Controller
         $em->persist($msg);
         $em->flush();
 
-        $resp= new Response('OK');
+        $resp= new Response('ok');
         $this->heders($resp);
         return $resp;
 
@@ -44,11 +44,11 @@ class MessageController extends Controller
         
         $em=$this->getDoctrine()->getManager();
         $data = json_decode($request->getContent(), true);
-         $d = $data['d']; 
-         $s = $data['s']; 
+         $s_email = $data['s_email'];
+         $d_email = $data['d_email'];
 
-        $user=$em->getRepository('DataBundle:User')->find($s);
-        $contact=$em->getRepository('DataBundle:Contact')->find($d);
+        $user=$em->getRepository('DataBundle:User')->findOneByEmail($s_email);
+        $contact=$em->getRepository('DataBundle:Contact')->findOneByEmail($d_email);
 
             // *********** find the user of $contact ***********
         $user1=$em->getRepository('DataBundle:User')->findHisUser($contact->getEmail());
@@ -63,7 +63,6 @@ class MessageController extends Controller
         $json = $serializer->serialize($messages, 'json', array());
 
         $resp= new Response($json);
-        $this->heders($resp);
         return $resp;
     }
 
