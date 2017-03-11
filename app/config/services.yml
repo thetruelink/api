@@ -10,6 +10,9 @@ services:
             public: false
             tags:
                 - { name: serializer.normalizer }
+    app.jwt_token_authenticator:
+            class: DataBundle\Service\JwtAuthenticator
+            arguments: ['@doctrine.orm.entity_manager', '@lexik_jwt_authentication.encoder']
   
 #    service_name:
 #        class: AppBundle\Directory\ClassName

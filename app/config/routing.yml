@@ -1,5 +1,5 @@
 data:
     resource: "@DataBundle/Resources/config/routing.yml"
-    prefix:   /
+    prefix:   /trueLink
 
 

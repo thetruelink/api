@@ -17,36 +17,20 @@ class SecurityController extends Controller
     {
 
         $data = json_decode($request->getContent(), true);
-        $username = $data['username'];
+        $email = $data['username'];
         $password = $data['password'];
 
-        $em=$this->getDoctrine()->getManager();
-        $user=$em->getRepository('DataBundle:User')->findOneBy(array('email'=>$username, 'password'=>$password));
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository('DataBundle:User')->findOneBy(array('email' => $email, 'password' => $password));
 
-        if($user===null) {$resp= new Response('No');}
-        else if ($user->getState()=== 'disabled') {$resp= new Response('disabled');}
-         else {
-             
-              $contact=$em->getRepository('DataBundle:Contact')->findOneByEmail($user->getEmail());
-             
-              $serializer = $this->get('serializer');
-              $json = $serializer->serialize($contact, 'json', array());
-
-             $resp= new Response($json);
-         }
-        
-       
-
-        $this->heders($resp);
-        return $resp;
-
-    }
-
-    function heders($resp){
-
-        $resp->headers->set('Access-Control-Allow-Origin', '*');
-        $resp->headers->set('Access-Control-Allow-Methods', 'GET, POST');
-        $resp->headers->set("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+        if ($user === null) {
+            return  new Response('No');
+        } else if ($user->getState() === 'disabled') {
+           return new Response('disabled');
+        } else {
+            $resp = $this->get('lexik_jwt_authentication.encoder')->encode(['email' => $email]);
+        }
+        return new JsonResponse(['token' => $resp]);
 
     }
 

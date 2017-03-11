@@ -8,6 +8,15 @@ security:
             memory: ~
 
     firewalls:
+        login:
+            pattern:  ^/trueLink/crediantialCheck
+            stateless: true
+            anonymous: true
+        api:
+            pattern: ^/trueLink
+            guard:
+                authenticators:
+                    - app.jwt_token_authenticator
         # disables authentication for assets and the profiler, adapt it according to your needs
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -22,3 +31,6 @@ security:
 
             # form_login: ~
             # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+
+    access_control:
+        - { path: /token-authentication, roles: IS_AUTHENTICATED_ANONYMOUSLY }
