@@ -17,20 +17,28 @@ class SecurityController extends Controller
     {
 
         $data = json_decode($request->getContent(), true);
-        $email = $data['username'];
+        $email = $data['email'];
         $password = $data['password'];
 
         $em = $this->getDoctrine()->getManager();
         $user = $em->getRepository('DataBundle:User')->findOneBy(array('email' => $email, 'password' => $password));
 
         if ($user === null) {
-            return  new Response('No');
+            return  new JsonResponse(['data' => 'No']);
         } else if ($user->getState() === 'disabled') {
-           return new Response('disabled');
+           return new JsonResponse( ['data' =>'disabled']);
         } else {
             $resp = $this->get('lexik_jwt_authentication.encoder')->encode(['email' => $email]);
         }
         return new JsonResponse(['token' => $resp]);
+
+    }
+    public function changePasswordAction(Request $request){
+        $data = json_decode($request->getContent(), true);
+        
+        $response = $this->get('data.data_provider')
+                         ->changePassword($data);
+        return new JsonResponse($response);
 
     }
 

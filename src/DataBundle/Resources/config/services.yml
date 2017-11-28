@@ -2,3 +2,15 @@ services:
 #    data.example:
 #        class: DataBundle\Example
 #        arguments: ["@service_id", "plain_value", %parameter%]
+
+    data.validator:
+        class : DataBundle\Http\RequestValidation
+        arguments : ["@doctrine.orm.entity_manager", "@service_container"]
+
+    data.data_provider:
+        class: DataBundle\Http\DataProvider
+        arguments : ["@doctrine.orm.entity_manager" , "@data.validator", "@service_container"]
+
+    data.amqp:
+        class: DataBundle\Rabbitmq\RbmqProvider
+

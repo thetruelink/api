@@ -8,14 +8,19 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use \DataBundle\Entity\User;
 use \DataBundle\Entity\Contact;
-
+use PhpAmqpLib\Exception\AMQPIOException;
+use PhpAmqpLib\Exception\AMQPRuntimeException;
+use PhpAmqpLib\Exception\AMQPTimeoutException;
+//require_once __DIR__ . '/vendor/autoload.php';
+use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Message\AMQPMessage;
 
 class ContactController extends Controller
 {
     public function addContactAction(Request $request)
     {
 
-        $em = $this->getDoctrine()->getManager();
+       /* $em = $this->getDoctrine()->getManager();
         $data = json_decode($request->getContent(), true);
         $userId = $data['userId'];
         $destId = $data['destId'];
@@ -32,12 +37,20 @@ class ContactController extends Controller
         $resp = new Response('ok');
         // $this->heders($resp);
         return $resp;
+        */
+
+        $data = json_decode($request->getContent(), true);
+
+        $response = $this->get('data.data_provider')
+                         ->addContact($data);
+        return new JsonResponse($response);
+
     }
 
     public function removeContactAction(Request $request)
     {
 
-        $em = $this->getDoctrine()->getManager();
+       /* $em = $this->getDoctrine()->getManager();
         $data = json_decode($request->getContent(), true);
         $userId = $data['userId'];
         $destId = $data['destId'];
@@ -51,11 +64,16 @@ class ContactController extends Controller
 
         $resp = new Response('ok');
         return $resp;
+        */
+        $data = json_decode($request->getContent(), true);
+        $response = $this->get('data.data_provider')
+                         ->removeContact($data); 
+        return new JsonResponse($response);
     }
 
     public function listeContactAction(Request $request)
     {
-
+   /*
         $em = $this->getDoctrine()->getManager();
 
         $data = json_decode($request->getContent(), true);
@@ -71,6 +89,12 @@ class ContactController extends Controller
         $resp = new Response($json);
         $this->heders($resp);
         return $resp;
+        */
+        $data = json_decode($request->getContent(), true);
+        $result = $this->get('data.data_provider')
+                       ->getContactList($data);
+
+        return new JsonResponse($result);
 
     }
 
@@ -104,6 +128,8 @@ class ContactController extends Controller
     public function changeStatusAction(Request $request)
     {
         $data = json_decode($request->getContent(), true);
+
+       /* 
         $email = $data['email'];
         $status = $data['status'];
         $em = $this->getDoctrine()->getManager();
@@ -114,6 +140,19 @@ class ContactController extends Controller
         $resp = new Response('ok');
         $this->heders($resp);
         return $resp;
+        */
+
+        $result = $this->get('data.data_provider')->changeStatusProvider($data);
+        /*$msg = implode(',', $data);
+
+        try {
+            $this->get('data.amqp')->execute($msg);
+        }catch(AMQPRuntimeException $e){
+              var_dump($e->getMessage());die();
+        }*/
+           
+
+        return new  JsonResponse( $result);
     }
 
     public function changeApiIdAction(Request $request)
@@ -262,6 +301,20 @@ class ContactController extends Controller
         $resp->headers->set('Access-Control-Allow-Methods', 'GET, POST');
         $resp->headers->set("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
+    }
+    public function getContactAction(Request $request){
+    
+        $data = json_decode($request->getContent(), true);
+        $email = $data['email'];
+        $contact = $this->getDoctrine()->getManager()
+                        ->getRepository('DataBundle:Contact')
+                        ->findOneByEmail($email);
+        
+        $serializer = $this->get('serializer');
+        $json = $serializer->serialize($contact, 'json', array());
+        $response = new JsonResponse($json);
+
+        return $response;
     }
 
 }

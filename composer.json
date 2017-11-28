@@ -24,7 +24,8 @@
         "incenteev/composer-parameter-handler": "^2.0",
         "doctrine/doctrine-fixtures-bundle": "~2.2",
         "nelmio/cors-bundle": "^1.4",
-        "lexik/jwt-authentication-bundle": "^2.1"
+        "lexik/jwt-authentication-bundle": "^2.1",
+        "php-amqplib/rabbitmq-bundle": "^1.13"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

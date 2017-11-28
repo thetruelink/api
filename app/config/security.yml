@@ -14,9 +14,10 @@ security:
             anonymous: true
         api:
             pattern: ^/trueLink
-            guard:
-                authenticators:
-                    - app.jwt_token_authenticator
+            anonymous: true
+            #guard:
+             #   authenticators:
+              #      - app.jwt_token_authenticator
         # disables authentication for assets and the profiler, adapt it according to your needs
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/

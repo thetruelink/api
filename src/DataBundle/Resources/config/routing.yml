@@ -58,3 +58,10 @@ data_api_get:
     path:     /getApiId
     defaults: { _controller: DataBundle:Contact:getApiId }
     
+data_contact_get:
+    path:     /getContact
+    defaults: { _controller: DataBundle:Contact:getContact }
+
+data_password_change:
+    path:     /change-password
+    defaults: { _controller: DataBundle:Security:changePassword }

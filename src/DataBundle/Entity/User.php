@@ -3,7 +3,7 @@
 namespace DataBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * User
  *
@@ -171,4 +171,9 @@ class User
     {
         return $this->state;
     }
+
+    public function getRoles(){}
+    public function getSalt(){}
+    public function getUsername(){}
+    public function eraseCredentials(){}
 }
